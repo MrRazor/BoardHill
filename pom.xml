@@ -11,7 +11,7 @@
     <groupId>cz.uhk</groupId>
     <artifactId>BoardHill</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>BoardHill</name>
     <description>BoardHill</description>
     <url/>
@@ -78,12 +78,14 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <version>${spring-boot.version}</version>
             <scope>provided</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
