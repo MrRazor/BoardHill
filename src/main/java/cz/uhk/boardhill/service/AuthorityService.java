@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AuthorityService {
+public class AuthorityService implements ServiceInterface<Authority, Long> {
 
     private final AuthorityRepository authorityRepository;
 

@@ -1,5 +1,6 @@
 package cz.uhk.boardhill.service;
 
+import cz.uhk.boardhill.entity.Authority;
 import cz.uhk.boardhill.entity.ChatUser;
 import cz.uhk.boardhill.repository.ChatUserRepository;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ChatUserService {
+public class ChatUserService implements ServiceInterface<ChatUser, Long> {
 
     private final ChatUserRepository chatUserRepository;
 
