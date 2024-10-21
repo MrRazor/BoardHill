@@ -1,8 +1,10 @@
 package cz.uhk.boardhill.service;
 
-import cz.uhk.boardhill.entity.Authority;
 import cz.uhk.boardhill.entity.Message;
 import cz.uhk.boardhill.repository.MessageRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +33,10 @@ public class MessageService implements ServiceInterface<Message, Long> {
 
     public void deleteById(Long id) {
         messageRepository.deleteById(id);
+    }
+
+    public Page<Message> getLatestMessages(Long chatId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return messageRepository.findByChatIdOrderByCreatedAtDesc(chatId, pageable);
     }
 }

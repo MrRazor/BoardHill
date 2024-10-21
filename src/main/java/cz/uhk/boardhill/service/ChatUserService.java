@@ -1,6 +1,5 @@
 package cz.uhk.boardhill.service;
 
-import cz.uhk.boardhill.entity.Authority;
 import cz.uhk.boardhill.entity.ChatUser;
 import cz.uhk.boardhill.repository.ChatUserRepository;
 import org.springframework.stereotype.Service;
