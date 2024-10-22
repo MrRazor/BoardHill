@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ChatService implements ServiceInterface<Chat, Long> {
+public class ChatService implements ServiceInterface<Chat, String> {
 
     private final ChatRepository chatRepository;
     private final ChatUserRepository chatUserRepository;
@@ -23,7 +23,7 @@ public class ChatService implements ServiceInterface<Chat, Long> {
         return chatRepository.findAll();
     }
 
-    public Optional<Chat> findById(Long id) {
+    public Optional<Chat> findById(String id) {
         return chatRepository.findById(id);
     }
 
@@ -31,7 +31,7 @@ public class ChatService implements ServiceInterface<Chat, Long> {
         return chatRepository.save(chat);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         chatRepository.deleteById(id);
     }
 }
