@@ -3,7 +3,7 @@ package cz.uhk.boardhill.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
@@ -23,12 +23,6 @@ public class ChatUser {
     private User user;
 
     @Column(name = "joined_at", nullable = false)
-    private LocalDateTime joinedAt;
-
-    @Column(name = "left_at")
-    private LocalDateTime leftAt;
-
-    @Column(name = "is_member", nullable = false)
-    private boolean isMember;
+    private ZonedDateTime joinedAt;
 
 }

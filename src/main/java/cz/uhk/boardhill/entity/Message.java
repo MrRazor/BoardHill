@@ -3,7 +3,7 @@ package cz.uhk.boardhill.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
@@ -29,9 +29,6 @@ public class Message {
     private boolean isDeleted;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private ZonedDateTime createdAt;
 
 }
