@@ -1,6 +1,7 @@
 package cz.uhk.boardhill.service;
 
 import cz.uhk.boardhill.entity.User;
+import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class UserService implements ServiceInterface<User, Long> {
 
     private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
     }
 
     public List<User> findAll() {
