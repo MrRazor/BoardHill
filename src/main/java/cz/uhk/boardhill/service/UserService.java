@@ -39,16 +39,21 @@ public class UserService implements ServiceInterface<User, String> {
         userRepository.deleteById(id);
     }
 
-    public void register(User user) {
-        if(userRepository.findById(user.getUsername()).isEmpty()) {
+    public void register(String username, String password) {
+        if(!userRepository.existsById(username)) {
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setEnabled(true);
             user = userRepository.save(user);
+
             Authority authority = new Authority();
             authority.setUser(user);
             authority.setAuthority("ROLE_USER");
             authorityRepository.save(authority);
         }
         else {
-            throw new RuntimeException("Username already exists");
+            throw new IllegalArgumentException("Username already exists");
         }
     }
 
@@ -65,7 +70,7 @@ public class UserService implements ServiceInterface<User, String> {
             }
         }
         else {
-            throw new RuntimeException("You are not admin or other user is admin");
+            throw new IllegalStateException("You are not admin or other user is admin");
         }
     }
 

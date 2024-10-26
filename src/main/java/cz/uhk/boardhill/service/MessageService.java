@@ -60,28 +60,32 @@ public class MessageService implements ServiceInterface<Message, Long> {
             message.setChat(chatRepository.getReferenceById(chatId));
         }
         else {
-            throw new RuntimeException("Chat does not exist");
+            throw new IllegalArgumentException("Chat does not exist");
         }
         if(userRepository.existsById(userId)) {
             message.setUser(userRepository.getReferenceById(userId));
         }
         else {
-            throw new RuntimeException("User does not exist");
+            throw new IllegalArgumentException("User does not exist");
         }
         message.setContent(content);
         message.setDeleted(false);
         messageRepository.save(message);
     }
 
-    public void deleteMessage(Message message, String loggedInUserId) {
+    public void deleteMessage(Long messageId, String loggedInUserId) {
         List<Authority> loggedInAuthorities = authorityRepository.findByUserUsername(loggedInUserId);
         boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
+
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new IllegalArgumentException("Message not found"));
+
         if(!message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || isAdminLoggedIn)) {
             message.setDeleted(true);
             messageRepository.save(message);
         }
         else {
-            throw new RuntimeException("Message is already deleted or you do not have permissions to do this");
+            throw new IllegalStateException("Message is already deleted or you do not have permissions to do this");
         }
     }
 }
