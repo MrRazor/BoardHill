@@ -7,6 +7,7 @@ import cz.uhk.boardhill.repository.ChatUserRepository;
 import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +54,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
         Chat chat = new Chat();
         chat.setName(name);
         chat.setOwner(userRepository.getReferenceById(userId));
-        chat.setCreatedAt(ZonedDateTime.now());
+        chat.setCreatedAt(ZonedDateTime.now(ZoneId.of("UTC")));
         chat.setDeleted(false);
 
         return chatRepository.save(chat);
