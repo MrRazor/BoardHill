@@ -8,7 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message,Long> {
-
     Page<Message> findAllByChatNameAndDeleted(String chatName, boolean deleted, Pageable pageable);
-
 }

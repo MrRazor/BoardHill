@@ -1,12 +1,11 @@
 package cz.uhk.boardhill.service;
 
 import cz.uhk.boardhill.entity.Authority;
+import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.User;
 import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.UserRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,8 +73,13 @@ public class UserService implements ServiceInterface<User, String> {
         }
     }
 
-    public Page<User> getUsers(String username, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAllByUsernameStartsWithIgnoreCaseOrderByUsernameAsc(username, pageable);
+    public List<User> findAllUsers() {
+        Sort sort = Sort.by("username").ascending();
+        return userRepository.findAll(sort);
+    }
+
+    public List<Chat> findAllUsersByChat(String chatName) {
+        Sort sort = Sort.by("username").ascending();
+        return userRepository.findAllByChat(chatName, sort);
     }
 }

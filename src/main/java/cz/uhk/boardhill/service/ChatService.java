@@ -5,9 +5,6 @@ import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.ChatRepository;
 import cz.uhk.boardhill.repository.ChatUserRepository;
 import cz.uhk.boardhill.repository.UserRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -47,22 +44,19 @@ public class ChatService implements ServiceInterface<Chat, String> {
         chatRepository.deleteById(id);
     }
 
-    public Page<Chat> findAllChats(int page, int size, String sortBy, boolean asc) {
-        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return chatRepository.findAll(pageable);
+    public List<Chat> findAllChats() {
+        Sort sort = Sort.by("name").ascending();
+        return chatRepository.findAll(sort);
     }
 
-    public Page<Chat> findAllChatsByUser(String username, int page, int size, String sortBy, boolean asc) {
-        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return chatRepository.findAllByUser(username, pageable);
+    public List<Chat> findAllChatsByUser(String username) {
+        Sort sort = Sort.by("name").ascending();
+        return chatRepository.findAllByUser(username, sort);
     }
 
-    public Page<Chat> findAllChatsByOwner(String username, int page, int size, String sortBy, boolean asc) {
-        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return chatRepository.findAllByOwnerUsername(username, pageable);
+    public List<Chat> findAllChatsByOwner(String username) {
+        Sort sort = Sort.by("name").ascending();
+        return chatRepository.findAllByOwnerUsername(username, sort);
     }
 
     public Chat createChat(String name, String userId) {

@@ -48,8 +48,8 @@ public class MessageService implements ServiceInterface<Message, Long> {
         messageRepository.deleteById(id);
     }
 
-    public Page<Message> getLatestMessages(String chatId, int page, int size, String sortBy, boolean asc) {
-        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+    public Page<Message> getMessages(String chatId, int page, int size) {
+        Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return messageRepository.findAllByChatNameAndDeleted(chatId, false, pageable);
     }
@@ -81,7 +81,7 @@ public class MessageService implements ServiceInterface<Message, Long> {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new IllegalArgumentException("Message not found"));
 
-        if(!message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || isAdminLoggedIn)) {
+        if(!message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || message.getChat().getOwner().getUsername().equals((loggedInUserId)) || isAdminLoggedIn)) {
             message.setDeleted(true);
             messageRepository.save(message);
         }
