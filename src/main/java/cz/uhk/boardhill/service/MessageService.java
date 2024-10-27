@@ -50,7 +50,7 @@ public class MessageService implements ServiceInterface<Message, Long> {
 
     public Page<Message> getLatestMessages(String chatId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return messageRepository.findAllByChatNameAndDeletedOrderByCreatedAtDesc(chatId, false, pageable);
+        return messageRepository.findAllByChatNameAndDeleted(chatId, false, pageable);
     }
 
     public void createMessage(String chatId, String userId, String content) {

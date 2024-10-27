@@ -5,6 +5,9 @@ import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.ChatRepository;
 import cz.uhk.boardhill.repository.ChatUserRepository;
 import cz.uhk.boardhill.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
@@ -41,6 +44,21 @@ public class ChatService implements ServiceInterface<Chat, String> {
 
     public void deleteById(String id) {
         chatRepository.deleteById(id);
+    }
+
+    public Page<Chat> findAllChats(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return chatRepository.findAll(pageable);
+    }
+
+    public Page<Chat> findAllChatsByUser(String username, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return chatRepository.findAllByUser(username, pageable);
+    }
+
+    public Page<Chat> findAllChatsByOwner(String username, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return chatRepository.findAllByOwnerUsername(username, pageable);
     }
 
     public Chat createChat(String name, String userId) {
