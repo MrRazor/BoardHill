@@ -8,6 +8,7 @@ import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
@@ -46,18 +47,21 @@ public class ChatService implements ServiceInterface<Chat, String> {
         chatRepository.deleteById(id);
     }
 
-    public Page<Chat> findAllChats(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Chat> findAllChats(int page, int size, String sortBy, boolean asc) {
+        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         return chatRepository.findAll(pageable);
     }
 
-    public Page<Chat> findAllChatsByUser(String username, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Chat> findAllChatsByUser(String username, int page, int size, String sortBy, boolean asc) {
+        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         return chatRepository.findAllByUser(username, pageable);
     }
 
-    public Page<Chat> findAllChatsByOwner(String username, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Chat> findAllChatsByOwner(String username, int page, int size, String sortBy, boolean asc) {
+        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         return chatRepository.findAllByOwnerUsername(username, pageable);
     }
 
@@ -117,6 +121,10 @@ public class ChatService implements ServiceInterface<Chat, String> {
     }
 
     public void removeUserFromChat(String chatName, String loggedInUserId, String userToRemoveId) {
+        if(loggedInUserId.equals(userToRemoveId)) {
+            throw new IllegalArgumentException("Chat owner cannot be removed");
+        }
+
         Chat chat = chatRepository.findById(chatName)
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
 

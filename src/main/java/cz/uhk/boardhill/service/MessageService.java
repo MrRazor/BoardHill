@@ -1,7 +1,6 @@
 package cz.uhk.boardhill.service;
 
 import cz.uhk.boardhill.entity.Authority;
-import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.Message;
 import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.ChatRepository;
@@ -10,6 +9,7 @@ import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
@@ -48,8 +48,9 @@ public class MessageService implements ServiceInterface<Message, Long> {
         messageRepository.deleteById(id);
     }
 
-    public Page<Message> getLatestMessages(String chatId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Message> getLatestMessages(String chatId, int page, int size, String sortBy, boolean asc) {
+        Sort sort = asc ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         return messageRepository.findAllByChatNameAndDeleted(chatId, false, pageable);
     }
 
