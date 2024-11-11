@@ -6,6 +6,7 @@ import cz.uhk.boardhill.entity.User;
 import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,12 @@ public class UserService implements ServiceInterface<User, String> {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
@@ -42,7 +45,7 @@ public class UserService implements ServiceInterface<User, String> {
         if(!userRepository.existsById(username)) {
             User user = new User();
             user.setUsername(username);
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
             user.setEnabled(true);
             user = userRepository.save(user);
 
