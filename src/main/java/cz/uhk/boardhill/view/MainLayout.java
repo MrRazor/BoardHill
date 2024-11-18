@@ -15,7 +15,7 @@ public class MainLayout extends AppLayout {
 
     H4 logo;
     if (authContext.isAuthenticated()) {
-      logo = new H4("Welcome User: " +
+      logo = new H4("Welcome to BoardHill User: " +
           authContext.getAuthenticatedUser(UserDetails.class).get().getUsername());
       logo.getStyle().set("left", "var(--lumo-space-l)").set("position", "absolute");
 
@@ -24,7 +24,7 @@ public class MainLayout extends AppLayout {
       logout.getStyle().set("right", "var(--lumo-space-l)").set("position", "absolute");
       addToNavbar(logo, logout);
     } else {
-      logo = new H4("Welcome");
+      logo = new H4("Welcome to BoardHill");
       logo.getStyle().set("left", "var(--lumo-space-l)").set("position", "absolute");
       addToNavbar(logo);
     }

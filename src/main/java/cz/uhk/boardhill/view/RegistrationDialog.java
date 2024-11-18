@@ -36,11 +36,11 @@ public class RegistrationDialog extends Dialog {
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
       }
       catch(IllegalArgumentException e1) {
-        Notification notification = Notification.show("User with this username exists!");
+        Notification notification = Notification.show(e1.getMessage());
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
       }
       catch(Exception e2) {
-        Notification notification = Notification.show("Registration failed! User with this username exists!");
+        Notification notification = Notification.show("Registration failed!");
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
       }
     });

@@ -21,7 +21,6 @@ public class LinkView extends VerticalLayout {
     List<GrantedAuthority> authorities = authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities().stream().collect(Collectors.toList());
     if (authorities.stream().map(a -> a.getAuthority()).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
 
-
     } else {
 
     }
