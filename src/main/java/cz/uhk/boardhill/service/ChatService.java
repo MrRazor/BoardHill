@@ -49,14 +49,19 @@ public class ChatService implements ServiceInterface<Chat, String> {
         return chatRepository.findAll(sort);
     }
 
-    public List<Chat> findAllChatsByUser(String username) {
+    public List<Chat> findAllNotDeletedChats() {
+        Sort sort = Sort.by("name").ascending();
+        return chatRepository.findAllByDeletedIsFalse(sort);
+    }
+
+    public List<Chat> findAllNotDeletedChatsByUser(String username) {
         Sort sort = Sort.by("name").ascending();
         return chatRepository.findAllByUser(username, sort);
     }
 
-    public List<Chat> findAllChatsByOwner(String username) {
+    public List<Chat> findAllNotDeletedChatsByOwner(String username) {
         Sort sort = Sort.by("name").ascending();
-        return chatRepository.findAllByOwnerUsername(username, sort);
+        return chatRepository.findAllByOwnerUsernameAndDeletedIsFalse(username, sort);
     }
 
     public Chat createChat(String name, String userId) {

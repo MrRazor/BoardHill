@@ -1,7 +1,7 @@
 package cz.uhk.boardhill;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
-import cz.uhk.boardhill.view.LoginView;
+import cz.uhk.boardhill.view.login.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

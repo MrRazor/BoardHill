@@ -1,4 +1,4 @@
-package cz.uhk.boardhill.view;
+package cz.uhk.boardhill.view.login;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -34,6 +34,7 @@ public class RegistrationDialog extends Dialog {
         userService.register(username.getValue(), password.getValue());
         Notification notification = Notification.show("User account created!");
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        this.close();
       }
       catch(IllegalArgumentException e1) {
         Notification notification = Notification.show(e1.getMessage());

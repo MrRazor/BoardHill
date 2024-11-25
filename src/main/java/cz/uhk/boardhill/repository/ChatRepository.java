@@ -10,7 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat,String> {
-    @Query("SELECT c FROM Chat c JOIN c.chatUsers cu WHERE cu.user.username = :username")
+    List<Chat> findAllByDeletedIsFalse(Sort sort);
+    @Query("SELECT c FROM Chat c JOIN c.chatUsers cu WHERE cu.user.username = :username and c.isDeleted = false")
     List<Chat> findAllByUser(String username, Sort sort);
-    List<Chat> findAllByOwnerUsername(String username, Sort sort);
+    List<Chat> findAllByOwnerUsernameAndDeletedIsFalse(String username, Sort sort);
 }

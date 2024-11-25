@@ -1,4 +1,4 @@
-package cz.uhk.boardhill.view;
+package cz.uhk.boardhill.view.login;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

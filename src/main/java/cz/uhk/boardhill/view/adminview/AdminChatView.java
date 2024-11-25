@@ -1,14 +1,17 @@
-package cz.uhk.boardhill.view;
+package cz.uhk.boardhill.view.adminview;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.service.ChatService;
+import cz.uhk.boardhill.view.MainLayout;
 import jakarta.annotation.security.RolesAllowed;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -40,6 +43,14 @@ public class AdminChatView extends VerticalLayout {
 
     add(header, tabs);
 
+    HorizontalLayout bar = new HorizontalLayout();
+    Button manageUsersButton = new Button("Manage User bans");
+    bar.add(manageUsersButton);
+    Button createChatButton = new Button("Create Chat");
+    bar.add(createChatButton);
+    Button deleteChatButton = new Button("Delete Chat");
+    bar.add(deleteChatButton);
+
     Grid<Chat> table = new Grid<>(Chat.class, false);
     table.addColumn(Chat::getName).setHeader("Name").setResizable(true);
     table.addColumn(Chat::getOwner).setHeader("Owner").setResizable(true);
@@ -47,6 +58,6 @@ public class AdminChatView extends VerticalLayout {
     table.addColumn(Chat::isDeleted).setHeader("Deleted").setResizable(true);
     table.setItems(chatService.findAllChats());
 
-    add(table);
+    add(bar, table);
   }
 }
