@@ -3,16 +3,18 @@ package cz.uhk.boardhill.view.adminview;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.service.ChatService;
 
 public class CreateChatDialog extends Dialog {
-  public CreateChatDialog(ChatService chatService, AuthenticationContext authContext) {
+  public CreateChatDialog(ChatService chatService, Grid<Chat> grid, AuthenticationContext authContext) {
     TextField chatName = new TextField("Chat Name");
     Button createChatButton = new Button("Create Chat");
     createChatButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -26,6 +28,7 @@ public class CreateChatDialog extends Dialog {
         chatService.createChat(chatName.getValue(), authContext.getPrincipalName().get());
         Notification notification = Notification.show("Chat created!");
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        grid.setItems(chatService.findAllNotDeletedChats());
         this.close();
       }
       catch(IllegalArgumentException e1) {

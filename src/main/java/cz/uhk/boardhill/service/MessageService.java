@@ -16,7 +16,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class MessageService implements ServiceInterface<Message, Long> {
 

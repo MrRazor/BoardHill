@@ -14,7 +14,6 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import cz.uhk.boardhill.entity.Chat;
-import cz.uhk.boardhill.entity.User;
 import cz.uhk.boardhill.service.ChatService;
 import cz.uhk.boardhill.service.UserService;
 import cz.uhk.boardhill.view.MainLayout;
@@ -23,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.hibernate.Hibernate;
 
 @Route(value = "chat/admin", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
@@ -57,11 +55,7 @@ public class AdminChatView extends VerticalLayout {
 
     Grid<Chat> table = new Grid<>(Chat.class, false);
     table.addColumn(Chat::getName).setHeader("Name").setResizable(true);
-    table.addColumn(c->{
-      Hibernate.initialize(c.getOwner().getAuthorities());
-      return c.getOwner().getUsername();
-    }
-    ).setHeader("Owner").setResizable(true);
+    table.addColumn(c->c.getOwner().getUsername()).setHeader("Owner").setResizable(true);
     table.addColumn(chat->chat.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))).setHeader("Created at").setResizable(true);
     table.addColumn(Chat::isDeleted).setHeader("Deleted").setResizable(true);
     table.setSelectionMode(SelectionMode.SINGLE);
@@ -72,7 +66,7 @@ public class AdminChatView extends VerticalLayout {
     manageUsersButton.addClickListener(e->new BanUserDialog(userService, authContext).open());
     bar.add(manageUsersButton);
     Button createChatButton = new Button("Create Chat");
-    createChatButton.addClickListener(e->new CreateChatDialog(chatService, authContext).open());
+    createChatButton.addClickListener(e->new CreateChatDialog(chatService, table, authContext).open());
     bar.add(createChatButton);
     Button deleteChatButton = new Button("Delete Chat");
     deleteChatButton.addClickListener(e->{

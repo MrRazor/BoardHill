@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import cz.uhk.boardhill.entity.User;
@@ -17,6 +18,8 @@ public class BanUserDialog extends Dialog {
 
   public BanUserDialog(UserService userService, AuthenticationContext authContext) {
     VerticalLayout showChatUsersLayout = new VerticalLayout();
+    showChatUsersLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.STRETCH);
+
     Grid<User> chatUsersGrid = new Grid<>();
     chatUsersGrid.addColumn(User::getUsername).setHeader("Username").setResizable(true);
     chatUsersGrid.addColumn(User::isEnabled).setHeader("Banned").setResizable(true);
