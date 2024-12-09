@@ -51,7 +51,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
 
     public List<Chat> findAllNotDeletedChats() {
         Sort sort = Sort.by("name").ascending();
-        return chatRepository.findAllByDeletedIsFalse(sort);
+        return chatRepository.findAllByIsDeletedIsFalse(sort);
     }
 
     public List<Chat> findAllNotDeletedChatsByUser(String username) {
@@ -61,7 +61,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
 
     public List<Chat> findAllNotDeletedChatsByOwner(String username) {
         Sort sort = Sort.by("name").ascending();
-        return chatRepository.findAllByOwnerUsernameAndDeletedIsFalse(username, sort);
+        return chatRepository.findAllByOwnerUsernameAndIsDeletedIsFalse(username, sort);
     }
 
     public Chat createChat(String name, String userId) {

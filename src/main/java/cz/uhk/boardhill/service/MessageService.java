@@ -51,7 +51,7 @@ public class MessageService implements ServiceInterface<Message, Long> {
     public Page<Message> getMessages(String chatId, int page, int size) {
         Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return messageRepository.findAllByChatNameAndDeleted(chatId, false, pageable);
+        return messageRepository.findAllByChatNameAndIsDeleted(chatId, false, pageable);
     }
 
     public void createMessage(String chatId, String userId, String content) {

@@ -15,7 +15,7 @@ public class Authority {
     @Column(name = "authority", nullable = false)
     private String authority;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "username", nullable = false)
     private User user;
 

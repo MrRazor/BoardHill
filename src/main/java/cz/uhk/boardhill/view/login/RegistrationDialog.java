@@ -25,6 +25,10 @@ public class RegistrationDialog extends Dialog {
     createAccountButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     createAccountButton.addClickListener(e->{
+      if(username == null || username.equals("") || password == null || password.equals("")) {
+        Notification notification = Notification.show("You need to fill everything!");
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+      }
       if(!password.getValue().equals(passwordAgain.getValue())) {
         Notification notification = Notification.show("Password is not same!");
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
