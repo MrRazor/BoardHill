@@ -1,4 +1,4 @@
-package cz.uhk.boardhill.view.adminview;
+package cz.uhk.boardhill.view.ownerview;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

@@ -1,7 +1,6 @@
 package cz.uhk.boardhill.service;
 
 import cz.uhk.boardhill.entity.Authority;
-import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.User;
 import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.UserRepository;
@@ -57,7 +56,7 @@ public class UserService implements ServiceInterface<User, String> {
             authorityRepository.save(authority);
         }
         else {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("Username is already taken");
         }
     }
 
@@ -83,7 +82,7 @@ public class UserService implements ServiceInterface<User, String> {
         return userRepository.findAll(sort);
     }
 
-    public List<Chat> findAllUsersByChat(String chatName) {
+    public List<User> findAllUsersByChat(String chatName) {
         Sort sort = Sort.by("username").ascending();
         return userRepository.findAllByChat(chatName, sort);
     }

@@ -68,7 +68,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
 
     public Chat createChat(String name, String userId) {
         if (chatRepository.existsById(name)) {
-            throw new IllegalArgumentException("Chat with the given name already exists");
+            throw new IllegalArgumentException("Chat name is already taken");
         }
         if(!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User does not exist");
@@ -80,7 +80,15 @@ public class ChatService implements ServiceInterface<Chat, String> {
         chat.setCreatedAt(ZonedDateTime.now(ZoneId.of("UTC")));
         chat.setDeleted(false);
 
-        return chatRepository.save(chat);
+        Chat createdChat = chatRepository.save(chat);
+
+        ChatUser chatUser = new ChatUser();
+        chatUser.setChat(chat);
+        chatUser.setUser(userRepository.getReferenceById(userId));
+        chatUser.setJoinedAt(ZonedDateTime.now());
+        chatUserRepository.save(chatUser);
+
+        return createdChat;
     }
 
     public void deleteChat(Chat chat, String loggedInUserId) {

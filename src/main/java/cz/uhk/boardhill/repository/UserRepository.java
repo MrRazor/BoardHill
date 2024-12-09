@@ -1,6 +1,5 @@
 package cz.uhk.boardhill.repository;
 
-import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +11,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User,String> {
     @Query("SELECT u FROM User u JOIN u.chatUsers cu WHERE cu.chat.name = :name")
-    List<Chat> findAllByChat(String name, Sort sort);
+    List<User> findAllByChat(String name, Sort sort);
 }

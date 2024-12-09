@@ -20,20 +20,20 @@ public class LinkView extends VerticalLayout {
     this.authContext = authContext;
 
     List<GrantedAuthority> authorities = authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities().stream().collect(Collectors.toList());
-    if (authorities.stream().map(a -> a.getAuthority()).anyMatch(a -> a.equals("ROLE_USER"))) {
-      Button userChatView = new Button("User Chat View");
-      add(userChatView);
-      userChatView.addClickListener(e ->
-          userChatView.getUI().ifPresent(ui ->
-              ui.navigate("chat/user"))
-      );
-      Button ownerChatView = new Button("Owner Chat View");
-      add(ownerChatView);
-      ownerChatView.addClickListener(e ->
-          ownerChatView.getUI().ifPresent(ui ->
-              ui.navigate("chat/owner"))
-      );
-    }
+
+    Button userChatView = new Button("User Chat View");
+    add(userChatView);
+    userChatView.addClickListener(e ->
+        userChatView.getUI().ifPresent(ui ->
+            ui.navigate("chat/user"))
+    );
+    Button ownerChatView = new Button("Owner Chat View");
+    add(ownerChatView);
+    ownerChatView.addClickListener(e ->
+        ownerChatView.getUI().ifPresent(ui ->
+            ui.navigate("chat/owner"))
+    );
+
     if (authorities.stream().map(a -> a.getAuthority()).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
       Button adminChatView = new Button("Admin Chat View");
       add(adminChatView);

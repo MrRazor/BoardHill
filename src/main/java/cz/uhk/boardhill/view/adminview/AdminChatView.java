@@ -65,9 +65,6 @@ public class AdminChatView extends VerticalLayout {
     Button manageUsersButton = new Button("Manage User bans");
     manageUsersButton.addClickListener(e->new BanUserDialog(userService, authContext).open());
     bar.add(manageUsersButton);
-    Button createChatButton = new Button("Create Chat");
-    createChatButton.addClickListener(e->new CreateChatDialog(chatService, table, authContext).open());
-    bar.add(createChatButton);
     Button deleteChatButton = new Button("Delete Chat");
     deleteChatButton.addClickListener(e->{
       Optional<Chat> chatOptional = table.getSelectedItems().stream().findFirst();
