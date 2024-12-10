@@ -65,6 +65,14 @@ public class UserChatView extends VerticalLayout {
       chatOptional.ifPresent(chat -> new ShowChatUsersDialog(userService, chat.getName()).open());
     });
     bar.add(manageChatUsersButton);
+    Button openChatButton = new Button("Open Chat");
+    openChatButton.addClickListener(e->{
+      Optional<Chat> chatOptional = table.getSelectedItems().stream().findFirst();
+      if (chatOptional.isPresent()) {
+        openChatButton.getUI().ifPresent(ui -> ui.navigate("chat/messages/" + chatOptional.get().getName()));
+      }
+    });
+    bar.add(openChatButton);
 
     add(bar, table);
   }

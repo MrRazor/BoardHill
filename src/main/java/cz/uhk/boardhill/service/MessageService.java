@@ -1,6 +1,7 @@
 package cz.uhk.boardhill.service;
 
 import cz.uhk.boardhill.entity.Authority;
+import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.Message;
 import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.ChatRepository;
@@ -53,26 +54,40 @@ public class MessageService implements ServiceInterface<Message, Long> {
     public Page<Message> getMessages(String chatId, int page, int size) {
         Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return messageRepository.findAllByChatNameAndIsDeleted(chatId, false, pageable);
+        return messageRepository.findAllByChatName(chatId, pageable);
     }
 
     public void createMessage(String chatId, String userId, String content) {
         Message message = new Message();
         message.setCreatedAt(ZonedDateTime.now(ZoneId.of("UTC")));
-        if(chatRepository.existsById(chatId)) {
-            message.setChat(chatRepository.getReferenceById(chatId));
-        }
-        else {
-            throw new IllegalArgumentException("Chat does not exist");
-        }
+        message.setContent(content);
+        message.setDeleted(false);
+
         if(userRepository.existsById(userId)) {
             message.setUser(userRepository.getReferenceById(userId));
         }
         else {
             throw new IllegalArgumentException("User does not exist");
         }
-        message.setContent(content);
-        message.setDeleted(false);
+
+        List<Authority> loggedInAuthorities = authorityRepository.findByUserUsername(userId);
+        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
+
+        Optional<Chat> chatOptional;
+        if(isAdminLoggedIn) {
+            chatOptional = chatRepository.findById(chatId);
+        }
+        else {
+            chatOptional = chatRepository.findAllByUser(userId, Sort.unsorted()).stream().filter(c->c.getName().equals(chatId)).findFirst();
+        }
+
+        if(chatOptional.isPresent() && !chatOptional.get().isDeleted()) {
+            message.setChat(chatOptional.get());
+        }
+        else {
+            throw new IllegalArgumentException("Chat does not exist");
+        }
+
         messageRepository.save(message);
     }
 
@@ -83,7 +98,7 @@ public class MessageService implements ServiceInterface<Message, Long> {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new IllegalArgumentException("Message not found"));
 
-        if(!message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || message.getChat().getOwner().getUsername().equals((loggedInUserId)) || isAdminLoggedIn)) {
+        if(!message.getChat().isDeleted() && !message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || message.getChat().getOwner().getUsername().equals((loggedInUserId)) || isAdminLoggedIn)) {
             message.setDeleted(true);
             messageRepository.save(message);
         }
