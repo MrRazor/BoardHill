@@ -56,7 +56,7 @@ public class UserChatView extends VerticalLayout {
     table.addColumn(chat->chat.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))).setHeader("Created at").setResizable(true);
     table.addColumn(Chat::isDeleted).setHeader("Deleted").setResizable(true);
     table.setSelectionMode(SelectionMode.SINGLE);
-    table.setItems(chatService.findAllNotDeletedChatsByOwner(authContext.getPrincipalName().get()));
+    table.setItems(chatService.findAllNotDeletedChatsByUser(authContext.getPrincipalName().get()));
 
     HorizontalLayout bar = new HorizontalLayout();
     Button manageChatUsersButton = new Button("Show Chat Users");
