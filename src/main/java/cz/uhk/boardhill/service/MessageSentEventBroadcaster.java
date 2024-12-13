@@ -8,6 +8,10 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class MessageSentEventBroadcaster {
+
+    private MessageSentEventBroadcaster() {
+    }
+
     static Executor executor = Executors.newSingleThreadExecutor();
 
     static LinkedList<Consumer<MessageSentEvent>> listeners = new LinkedList<>();

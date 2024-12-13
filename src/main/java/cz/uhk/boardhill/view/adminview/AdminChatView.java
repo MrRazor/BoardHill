@@ -26,14 +26,8 @@ import java.util.Optional;
 @Route(value = "chat/admin", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 public class AdminChatView extends VerticalLayout {
-  private final UserService userService;
-  private final ChatService chatService;
-  private final AuthenticationContext authContext;
 
   public AdminChatView(UserService userService, ChatService chatService, AuthenticationContext authContext) {
-    this.userService = userService;
-    this.chatService = chatService;
-    this.authContext = authContext;
 
     setAlignItems(FlexComponent.Alignment.CENTER);
 

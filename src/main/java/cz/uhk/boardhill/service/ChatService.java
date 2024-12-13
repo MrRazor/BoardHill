@@ -46,11 +46,6 @@ public class ChatService implements ServiceInterface<Chat, String> {
         chatRepository.deleteById(id);
     }
 
-    public List<Chat> findAllChats() {
-        Sort sort = Sort.by("name").ascending();
-        return chatRepository.findAll(sort);
-    }
-
     public List<Chat> findAllNotDeletedChats() {
         Sort sort = Sort.by("name").ascending();
         return chatRepository.findAllByIsDeletedIsFalse(sort);

@@ -25,14 +25,8 @@ import java.util.Optional;
 @Route(value = "chat/owner", layout = MainLayout.class)
 @RolesAllowed({"USER", "ADMIN"})
 public class OwnerChatView extends VerticalLayout {
-  private final UserService userService;
-  private final ChatService chatService;
-  private final AuthenticationContext authContext;
 
   public OwnerChatView(UserService userService, ChatService chatService, AuthenticationContext authContext) {
-    this.userService = userService;
-    this.chatService = chatService;
-    this.authContext = authContext;
 
     setAlignItems(Alignment.CENTER);
 

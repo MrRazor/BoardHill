@@ -18,10 +18,8 @@ import cz.uhk.boardhill.service.UserService;
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private final LoginForm login = new LoginForm();
-    private final UserService userService;
 
     public LoginView(UserService userService) {
-        this.userService = userService;
 
         addClassName("login-view");
         setSizeFull();
