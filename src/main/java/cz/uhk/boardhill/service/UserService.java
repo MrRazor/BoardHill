@@ -42,7 +42,7 @@ public class UserService implements ServiceInterface<User, String> {
         userRepository.deleteById(id);
     }
 
-    public void register(String username, String password) {
+    public void register(String username, String password, boolean isAdmin) {
         if(!userRepository.existsById(username)) {
             User user = new User();
             user.setUsername(username);
@@ -54,6 +54,13 @@ public class UserService implements ServiceInterface<User, String> {
             authority.setUser(user);
             authority.setAuthority("ROLE_USER");
             authorityRepository.save(authority);
+
+            if(isAdmin) {
+                Authority adminAuthority = new Authority();
+                adminAuthority.setUser(user);
+                adminAuthority.setAuthority("ROLE_ADMIN");
+                authorityRepository.save(authority);
+            }
         }
         else {
             throw new IllegalArgumentException("Username is already taken");

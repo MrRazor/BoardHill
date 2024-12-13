@@ -36,7 +36,7 @@ public class RegistrationDialog extends Dialog {
         return;
       }
       try {
-        userService.register(username.getValue(), password.getValue());
+        userService.register(username.getValue(), password.getValue(), false);
         Notification notification = Notification.show("User account created!");
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         this.close();
