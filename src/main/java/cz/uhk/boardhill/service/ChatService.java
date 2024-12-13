@@ -104,7 +104,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
     }
 
     public void addUserToChat(String chatName, String loggedInUserId, String userToAddId) {
-        Chat chat = chatRepository.findById(chatName)
+        Chat chat = chatRepository.findAllByUser(chatName, Sort.unsorted()).stream().filter(c->c.getName().equals(chatName)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
 
         if (!chat.getOwner().getUsername().equals(loggedInUserId)) {
@@ -134,7 +134,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
             throw new IllegalArgumentException("Chat owner cannot be removed");
         }
 
-        Chat chat = chatRepository.findById(chatName)
+        Chat chat = chatRepository.findAllByUser(chatName, Sort.unsorted()).stream().filter(c->c.getName().equals(chatName)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
 
         if (!chat.getOwner().getUsername().equals(loggedInUserId)) {

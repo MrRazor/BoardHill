@@ -3,6 +3,7 @@ package cz.uhk.boardhill.view.userview;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -13,10 +14,13 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.Message;
 import cz.uhk.boardhill.service.ChatService;
+import cz.uhk.boardhill.service.MessageSentEvent;
+import cz.uhk.boardhill.service.MessageSentEventBroadcaster;
 import cz.uhk.boardhill.service.MessageService;
 import cz.uhk.boardhill.view.MainLayout;
 import jakarta.annotation.security.RolesAllowed;
@@ -26,6 +30,7 @@ import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -37,12 +42,13 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
   private final MessageService messageService;
   private final AuthenticationContext authContext;
   private List<Message> messages;
-  private int page=0;
+  private int page = 0;
   private final int PAGE_SIZE = 10;
   private Chat chat;
   private String username;
   private VerticalLayout messageLayout;
-  private Timer timer;
+  private boolean fullyLoaded = false;
+  private Registration broadcasterRegistration;
 
   public ChatMessageView(ChatService chatService, MessageService messageService, AuthenticationContext authContext) {
     this.chatService = chatService;
@@ -52,19 +58,18 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
 
   @Override
   protected void onAttach(AttachEvent attachEvent) {
-    timer = new Timer();
-    timer.scheduleAtFixedRate(new TimerTask() {
-      @Override
-      public void run() {
-        attachEvent.getUI().access(()->reloadMessages());
+    UI ui = attachEvent.getUI();
+    broadcasterRegistration = MessageSentEventBroadcaster.register(newMessageSendEvent -> {
+      if (fullyLoaded && newMessageSendEvent.getChatId().equals(chat.getName())) {
+        ui.access(this::reloadMessages);
       }
-    }, 10000L, 10000L);
+    });
   }
 
   @Override
   protected void onDetach(DetachEvent detachEvent) {
-    timer.cancel();
-    timer = null;
+    broadcasterRegistration.remove();
+    broadcasterRegistration = null;
   }
 
   @Override
@@ -94,8 +99,8 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
       sendMessage.addClickListener(e->{
         if(input.getValue() != null && !input.getValue().equals("")) {
           messageService.createMessage(s, username, input.getValue());
+          MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
           input.setValue("");
-          reloadMessages();
         }
       });
       inputBar.add(input, sendMessage);
@@ -121,6 +126,8 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
       });
       pageBar.add(previousPage, pageText, nextPage);
       add(pageBar);
+
+      fullyLoaded = true;
     }
     else {
       Notification notification = Notification.show("You cannot view this chat");
@@ -129,15 +136,7 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
   }
 
   private void reloadMessages() {
-    if(chat == null) {
-      return;
-    }
-    messages = messageService.getMessages(chat.getName(), page, PAGE_SIZE).stream().collect(Collectors.toCollection(new Supplier<List<Message>>() {
-      @Override
-      public List<Message> get() {
-        return new ArrayList<>();
-      }
-    }));
+    messages = messageService.getMessages(chat.getName(), page, PAGE_SIZE).stream().collect(Collectors.toCollection((Supplier<List<Message>>) ArrayList::new));
     Collections.reverse(messages);
 
     messageLayout.removeAll();
