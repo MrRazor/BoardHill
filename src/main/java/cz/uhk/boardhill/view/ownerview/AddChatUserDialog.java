@@ -16,13 +16,25 @@ import java.util.Optional;
 
 public class AddChatUserDialog extends Dialog {
   public AddChatUserDialog(UserService userService, ChatService chatService, String chatName, AuthenticationContext authContext) {
+    setWidth("600px");
+    setMinWidth("400px");
+    setMaxWidth("90vw");
+
     VerticalLayout showChatUsersLayout = new VerticalLayout();
+    showChatUsersLayout.setSizeFull();
+    showChatUsersLayout.setPadding(false);
+    showChatUsersLayout.setSpacing(true);
+
+    showChatUsersLayout.setMaxHeight("80vh");
+    showChatUsersLayout.getStyle().set("overflow", "auto");
 
     Grid<User> chatUsersGrid = new Grid<>();
     chatUsersGrid.addColumn(User::getUsername).setHeader("Username").setResizable(true);
     chatUsersGrid.addColumn(User::isEnabled).setHeader("Enabled").setResizable(true);
     chatUsersGrid.setItems(userService.findAllUsers());
     chatUsersGrid.setSelectionMode(SelectionMode.SINGLE);
+
+    chatUsersGrid.setWidthFull();
 
     Button banUserButton = new Button("Add User");
     banUserButton.addClickListener(e->{

@@ -5,11 +5,14 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -43,7 +46,7 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
   private final AuthenticationContext authContext;
   private List<Message> messages;
   private int page = 0;
-  private final int PAGE_SIZE = 10;
+  private static final int PAGE_SIZE = 7;
   private Chat chat;
   private String username;
   private VerticalLayout messageLayout;
@@ -54,6 +57,21 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
     this.chatService = chatService;
     this.messageService = messageService;
     this.authContext = authContext;
+
+    Tabs tabs = new Tabs();
+    tabs.setAutoselect(false);
+    Map<Tab, String> tabsToLinks = new HashMap<>();
+    tabs.addSelectedChangeListener(e ->
+        tabs.getUI().ifPresent(ui -> ui.navigate(tabsToLinks.get(tabs.getSelectedTab())))
+    );
+
+    Tab tab = new Tab("Go Back");
+    tabsToLinks.put(tab, "chat/user");
+    tabs.add(tab);
+
+    H1 header = new H1("Message View");
+
+    add(header, tabs);
 
     setSizeFull();
     setAlignItems(Alignment.CENTER);
@@ -167,11 +185,15 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
       );
       messageContent.setSpacing(false);
       messageContent.setPadding(false);
-      messageContent.setWidthFull();
+
+      if (message.getUser().getUsername().equals(username)) {
+        messageContent.getStyle().set("background-color", "#E6EFF0");
+      }
 
       Button deleteMessageButton = new Button("Delete");
       deleteMessageButton.addClickListener(e -> {
         messageService.deleteMessage(message.getId(), username);
+        MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
       });
       if (!message.getUser().getUsername().equals(username) && !chat.getOwner().getUsername().equals(username)) {
         deleteMessageButton.setEnabled(false);
