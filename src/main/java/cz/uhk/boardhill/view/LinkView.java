@@ -13,11 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Route(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER", "ADMIN"})
 public class LinkView extends VerticalLayout {
-  private final transient AuthenticationContext authContext;
 
   public LinkView(AuthenticationContext authContext) {
     setAlignItems(Alignment.CENTER);
-    this.authContext = authContext;
 
     List<GrantedAuthority> authorities = authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities().stream().collect(Collectors.toList());
 

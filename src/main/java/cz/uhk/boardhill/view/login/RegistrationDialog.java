@@ -13,10 +13,7 @@ import cz.uhk.boardhill.service.UserService;
 
 public class RegistrationDialog extends Dialog {
 
-  private final UserService userService;
-
   public RegistrationDialog(UserService userService) {
-    this.userService = userService;
 
     TextField username = new TextField("Username");
     PasswordField password = new PasswordField("Password");

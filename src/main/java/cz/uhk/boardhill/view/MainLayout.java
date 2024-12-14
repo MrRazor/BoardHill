@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class MainLayout extends AppLayout {
 
-  private final transient AuthenticationContext authContext;
-
   public MainLayout(AuthenticationContext authContext) {
-    this.authContext = authContext;
 
     H4 logo;
     if (authContext.isAuthenticated()) {
@@ -20,7 +17,7 @@ public class MainLayout extends AppLayout {
       logo.getStyle().set("left", "var(--lumo-space-l)").set("position", "absolute");
 
       Button logout = new Button("Logout", click ->
-          this.authContext.logout());
+          authContext.logout());
       logout.getStyle().set("right", "var(--lumo-space-l)").set("position", "absolute");
       addToNavbar(logo, logout);
     } else {
