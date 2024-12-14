@@ -53,7 +53,7 @@ public class BanUserDialog extends Dialog {
           }
           chatUsersGrid.setItems(userService.findAllUsers());
         }
-        catch(IllegalStateException e1) {
+        catch(IllegalArgumentException|IllegalStateException e1) {
           Notification notification = Notification.show(e1.getMessage());
           notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         }

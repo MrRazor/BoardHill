@@ -38,7 +38,7 @@ public class RegistrationDialog extends Dialog {
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         this.close();
       }
-      catch(IllegalArgumentException e1) {
+      catch(IllegalArgumentException|IllegalStateException e1) {
         Notification notification = Notification.show(e1.getMessage());
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
       }

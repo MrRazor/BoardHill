@@ -49,6 +49,7 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
   private static final int PAGE_SIZE = 7;
   private Chat chat;
   private String username;
+  private boolean isAdmin = false;
   private VerticalLayout messageLayout;
   private boolean fullyLoaded = false;
   private Registration broadcasterRegistration;
@@ -97,15 +98,16 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
   public void setParameter(BeforeEvent beforeEvent, String s) {
     List<GrantedAuthority> authorities = authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities().stream().collect(Collectors.toList());
     username = authContext.getPrincipalName().get();
+    isAdmin = authorities.stream().map(a -> a.getAuthority()).anyMatch(a -> a.equals("ROLE_ADMIN"));
 
     Optional<Chat> chatOptional;
-    if (authorities.stream().map(a -> a.getAuthority()).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
+    if (isAdmin) {
       chatOptional = chatService.findById(s);
     } else {
       chatOptional = chatService.findAllNotDeletedChatsByUser(username).stream().filter(c -> c.getName().equals(s)).findFirst();
     }
 
-    if (chatOptional.isPresent()) {
+    if (chatOptional.isPresent() && !chatOptional.get().isDeleted()) {
       chat = chatOptional.get();
 
       messageLayout = new VerticalLayout();
@@ -126,9 +128,19 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
       Button sendMessage = new Button("Send");
       sendMessage.addClickListener(e -> {
         if (input.getValue() != null && !input.getValue().isEmpty()) {
-          messageService.createMessage(s, username, input.getValue());
-          MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
-          input.clear();
+          try {
+            messageService.createMessage(s, username, input.getValue());
+            MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
+            input.clear();
+          }
+          catch(IllegalArgumentException|IllegalStateException e1) {
+            Notification notification = Notification.show(e1.getMessage());
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+          }
+          catch(Exception e2) {
+            Notification notification = Notification.show("Sending message failed!");
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+          }
         }
       });
 
@@ -192,10 +204,20 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
 
       Button deleteMessageButton = new Button("Delete");
       deleteMessageButton.addClickListener(e -> {
-        messageService.deleteMessage(message.getId(), username);
-        MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
+        try {
+          messageService.deleteMessage(message.getId(), username);
+          MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
+        }
+        catch(IllegalArgumentException|IllegalStateException e1) {
+          Notification notification = Notification.show(e1.getMessage());
+          notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        }
+        catch(Exception e2) {
+          Notification notification = Notification.show("Deleting message failed!");
+          notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        }
       });
-      if (!message.getUser().getUsername().equals(username) && !chat.getOwner().getUsername().equals(username)) {
+      if (!message.getUser().getUsername().equals(username) && !chat.getOwner().getUsername().equals(username) && !isAdmin) {
         deleteMessageButton.setEnabled(false);
       }
 

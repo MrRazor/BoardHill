@@ -45,7 +45,7 @@ public class AddChatUserDialog extends Dialog {
           Notification notification = Notification.show("User added!");
           notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         }
-        catch(IllegalArgumentException e1) {
+        catch(IllegalArgumentException|IllegalStateException e1) {
           Notification notification = Notification.show(e1.getMessage());
           notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         }

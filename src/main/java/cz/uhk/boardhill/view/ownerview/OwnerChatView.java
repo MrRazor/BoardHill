@@ -66,8 +66,12 @@ public class OwnerChatView extends VerticalLayout {
           chatService.deleteChat(chatOptional.get(), authContext.getPrincipalName().get());
           table.setItems(chatService.findAllNotDeletedChatsByOwner(authContext.getPrincipalName().get()));
         }
-        catch(Exception ex) {
-          Notification notification = Notification.show(ex.getMessage());
+        catch(IllegalArgumentException|IllegalStateException e1) {
+          Notification notification = Notification.show(e1.getMessage());
+          notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        }
+        catch(Exception e2) {
+          Notification notification = Notification.show("Deleting chat failed!");
           notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         }
       }

@@ -46,7 +46,7 @@ public class ManageChatUsersDialog extends Dialog {
           notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
           chatUsersGrid.setItems(userService.findAllUsersByChat(chatName));
         }
-        catch(IllegalArgumentException e1) {
+        catch(IllegalArgumentException|IllegalStateException e1) {
           Notification notification = Notification.show(e1.getMessage());
           notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         }

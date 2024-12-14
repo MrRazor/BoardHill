@@ -31,7 +31,7 @@ public class CreateChatDialog extends Dialog {
         grid.setItems(chatService.findAllNotDeletedChats());
         this.close();
       }
-      catch(IllegalArgumentException e1) {
+      catch(IllegalArgumentException|IllegalStateException e1) {
         Notification notification = Notification.show(e1.getMessage());
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
       }
