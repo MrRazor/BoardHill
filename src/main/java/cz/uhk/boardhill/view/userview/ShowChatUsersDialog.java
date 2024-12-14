@@ -9,28 +9,28 @@ import cz.uhk.boardhill.entity.User;
 import cz.uhk.boardhill.service.UserService;
 
 public class ShowChatUsersDialog extends Dialog {
-  public ShowChatUsersDialog(UserService userService, String chatName) {
+    public ShowChatUsersDialog(UserService userService, String chatName) {
 
-    setWidth("600px");
-    setMinWidth("400px");
-    setMaxWidth("90vw");
+        setWidth("600px");
+        setMinWidth("400px");
+        setMaxWidth("90vw");
 
-    Grid<User> chatUsersGrid = new Grid<>();
-    chatUsersGrid.addColumn(User::getUsername).setHeader("Username").setResizable(true);
-    chatUsersGrid.addColumn(User::isEnabled).setHeader("Enabled").setResizable(true);
-    chatUsersGrid.setItems(userService.findAllUsersByChat(chatName));
-    chatUsersGrid.setSelectionMode(SelectionMode.NONE);
+        Grid<User> chatUsersGrid = new Grid<>();
+        chatUsersGrid.addColumn(User::getUsername).setHeader("Username").setResizable(true);
+        chatUsersGrid.addColumn(User::isEnabled).setHeader("Enabled").setResizable(true);
+        chatUsersGrid.setItems(userService.findAllUsersByChat(chatName));
+        chatUsersGrid.setSelectionMode(SelectionMode.NONE);
 
-    chatUsersGrid.setWidthFull();
+        chatUsersGrid.setWidthFull();
 
-    VerticalLayout layout = new VerticalLayout(new H3("Manage Chat Users"), chatUsersGrid);
-    layout.setSizeFull();
-    layout.setPadding(false);
-    layout.setSpacing(true);
+        VerticalLayout layout = new VerticalLayout(new H3("Manage Chat Users"), chatUsersGrid);
+        layout.setSizeFull();
+        layout.setPadding(false);
+        layout.setSpacing(true);
 
-    layout.setMaxHeight("80vh");
-    layout.getStyle().set("overflow", "auto");
+        layout.setMaxHeight("80vh");
+        layout.getStyle().set("overflow", "auto");
 
-    add(layout);
-  }
+        add(layout);
+    }
 }

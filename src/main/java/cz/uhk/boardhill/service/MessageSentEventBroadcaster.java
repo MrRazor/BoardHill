@@ -9,12 +9,11 @@ import java.util.function.Consumer;
 
 public class MessageSentEventBroadcaster {
 
+    static final Executor executor = Executors.newSingleThreadExecutor();
+    static final LinkedList<Consumer<MessageSentEvent>> listeners = new LinkedList<>();
+
     private MessageSentEventBroadcaster() {
     }
-
-    static final Executor executor = Executors.newSingleThreadExecutor();
-
-    static final LinkedList<Consumer<MessageSentEvent>> listeners = new LinkedList<>();
 
     public static synchronized Registration register(Consumer<MessageSentEvent> listener) {
         listeners.add(listener);

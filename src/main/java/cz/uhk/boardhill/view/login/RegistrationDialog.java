@@ -13,43 +13,41 @@ import cz.uhk.boardhill.service.UserService;
 
 public class RegistrationDialog extends Dialog {
 
-  public RegistrationDialog(UserService userService) {
+    public RegistrationDialog(UserService userService) {
 
-    TextField username = new TextField("Username");
-    PasswordField password = new PasswordField("Password");
-    PasswordField passwordAgain = new PasswordField("Password again");
-    Button createAccountButton = new Button("Create account");
-    createAccountButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        TextField username = new TextField("Username");
+        PasswordField password = new PasswordField("Password");
+        PasswordField passwordAgain = new PasswordField("Password again");
+        Button createAccountButton = new Button("Create account");
+        createAccountButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-    createAccountButton.addClickListener(e->{
-      if(username.getValue() == null || username.getValue().isEmpty() || password.getValue() == null || password.getValue().isEmpty()) {
-        Notification notification = Notification.show("You need to fill everything!");
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        return;
-      }
-      if(!password.getValue().equals(passwordAgain.getValue())) {
-        Notification notification = Notification.show("Password is not same!");
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        return;
-      }
-      try {
-        userService.register(username.getValue(), password.getValue(), false);
-        Notification notification = Notification.show("User account created!");
-        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        this.close();
-      }
-      catch(IllegalArgumentException|IllegalStateException e1) {
-        Notification notification = Notification.show(e1.getMessage());
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-      }
-      catch(Exception e2) {
-        Notification notification = Notification.show("Registration failed!");
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-      }
-    });
+        createAccountButton.addClickListener(e -> {
+            if (username.getValue() == null || username.getValue().isEmpty() || password.getValue() == null || password.getValue().isEmpty()) {
+                Notification notification = Notification.show("You need to fill everything!");
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                return;
+            }
+            if (!password.getValue().equals(passwordAgain.getValue())) {
+                Notification notification = Notification.show("Password is not same!");
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                return;
+            }
+            try {
+                userService.register(username.getValue(), password.getValue(), false);
+                Notification notification = Notification.show("User account created!");
+                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                this.close();
+            } catch (IllegalArgumentException | IllegalStateException e1) {
+                Notification notification = Notification.show(e1.getMessage());
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            } catch (Exception e2) {
+                Notification notification = Notification.show("Registration failed!");
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+        });
 
-    add(new VerticalLayout(new H3("Registration"), username, password, passwordAgain, createAccountButton));
-  }
+        add(new VerticalLayout(new H3("Registration"), username, password, passwordAgain, createAccountButton));
+    }
 
 
 }

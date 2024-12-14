@@ -15,8 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BoardHillApplication implements CommandLineRunner, AppShellConfigurator {
 
-    private final UserService userService;
     private static final Logger LOGGER = LogManager.getLogger(BoardHillApplication.class);
+    private final UserService userService;
 
     public static void main(String[] args) {
         SpringApplication.run(BoardHillApplication.class, args);
@@ -27,13 +27,13 @@ public class BoardHillApplication implements CommandLineRunner, AppShellConfigur
         try {
             userService.register("admin", "password", true);
             LOGGER.info("Default user with admin rights (username: \"admin\", password: \"password\") created.");
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.info("Default user with admin rights (username: \"admin\", password: \"password\") was not created, probably already exists (is created at first run of application).");
         }
         try {
             userService.register("user", "password", false);
             LOGGER.info("Default user without admin rights (username: \"user\", password: \"password\") created.");
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.info("Default user without admin rights (username: \"user\", password: \"password\") was not created, probably already exists (is created at first run of application).");
         }
     }

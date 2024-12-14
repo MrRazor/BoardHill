@@ -1,18 +1,20 @@
 package cz.uhk.boardhill.service;
 
-import cz.uhk.boardhill.entity.*;
+import cz.uhk.boardhill.entity.Authority;
+import cz.uhk.boardhill.entity.Chat;
+import cz.uhk.boardhill.entity.ChatUser;
 import cz.uhk.boardhill.repository.AuthorityRepository;
 import cz.uhk.boardhill.repository.ChatRepository;
 import cz.uhk.boardhill.repository.ChatUserRepository;
 import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
@@ -65,7 +67,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
         if (chatRepository.existsById(name)) {
             throw new IllegalArgumentException("Chat name is already taken");
         }
-        if(!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User does not exist");
         }
 
@@ -88,18 +90,17 @@ public class ChatService implements ServiceInterface<Chat, String> {
 
     public void deleteChat(Chat chat, String loggedInUserId) {
         List<Authority> loggedInAuthorities = authorityRepository.findByUsername(loggedInUserId);
-        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
-        if(!chat.isDeleted() && (chat.getOwner().getUsername().equals(loggedInUserId) || isAdminLoggedIn)) {
+        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!chat.isDeleted() && (chat.getOwner().getUsername().equals(loggedInUserId) || isAdminLoggedIn)) {
             chat.setDeleted(true);
             chatRepository.save(chat);
-        }
-        else {
+        } else {
             throw new IllegalStateException("Chat is already deleted or you do not have permissions to do this");
         }
     }
 
     public void addUserToChat(String chatName, String loggedInUserId, String userToAddId) {
-        Chat chat = chatRepository.findAllByUser(chatName, Sort.unsorted()).stream().filter(c->c.getName().equals(chatName)).findFirst()
+        Chat chat = chatRepository.findAllByUser(chatName, Sort.unsorted()).stream().filter(c -> c.getName().equals(chatName)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
 
         if (!chat.getOwner().getUsername().equals(loggedInUserId)) {
@@ -112,7 +113,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
             throw new IllegalArgumentException("User is already in the chat");
         }
 
-        if(!userRepository.existsById(userToAddId)) {
+        if (!userRepository.existsById(userToAddId)) {
             throw new IllegalArgumentException("User does not exist");
         }
 
@@ -125,11 +126,11 @@ public class ChatService implements ServiceInterface<Chat, String> {
     }
 
     public void removeUserFromChat(String chatName, String loggedInUserId, String userToRemoveId) {
-        if(loggedInUserId.equals(userToRemoveId)) {
+        if (loggedInUserId.equals(userToRemoveId)) {
             throw new IllegalArgumentException("Chat owner cannot be removed");
         }
 
-        Chat chat = chatRepository.findAllByUser(chatName, Sort.unsorted()).stream().filter(c->c.getName().equals(chatName)).findFirst()
+        Chat chat = chatRepository.findAllByUser(chatName, Sort.unsorted()).stream().filter(c -> c.getName().equals(chatName)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Chat not found"));
 
         if (!chat.getOwner().getUsername().equals(loggedInUserId)) {

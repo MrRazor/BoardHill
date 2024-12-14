@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ChatUserRepository extends JpaRepository<ChatUser,Long> {
+public interface ChatUserRepository extends JpaRepository<ChatUser, Long> {
     Optional<ChatUser> findByChatNameAndUserUsername(String chatName, String userName);
 }

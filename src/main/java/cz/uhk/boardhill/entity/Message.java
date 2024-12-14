@@ -2,11 +2,11 @@ package cz.uhk.boardhill.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-
-import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.ZonedDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor

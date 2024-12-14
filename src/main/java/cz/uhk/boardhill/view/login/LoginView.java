@@ -33,7 +33,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         Button registerButton = new Button("Sign up");
         registerButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         registerButton.setWidth("20rem");
-        registerButton.addClickListener(e->{
+        registerButton.addClickListener(e -> {
             new RegistrationDialog(userService).open();
         });
 
@@ -42,7 +42,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if(beforeEnterEvent.getLocation()
+        if (beforeEnterEvent.getLocation()
                 .getQueryParameters()
                 .getParameters()
                 .containsKey("error")) {

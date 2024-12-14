@@ -7,10 +7,10 @@ import cz.uhk.boardhill.repository.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
@@ -43,7 +43,7 @@ public class UserService implements ServiceInterface<User, String> {
     }
 
     public void register(String username, String password, boolean isAdmin) {
-        if(!userRepository.existsById(username)) {
+        if (!userRepository.existsById(username)) {
             User user = new User();
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
@@ -55,31 +55,29 @@ public class UserService implements ServiceInterface<User, String> {
             authority.setAuthority("ROLE_USER");
             authorityRepository.save(authority);
 
-            if(isAdmin) {
+            if (isAdmin) {
                 Authority adminAuthority = new Authority();
                 adminAuthority.setUsername(username);
                 adminAuthority.setAuthority("ROLE_ADMIN");
                 authorityRepository.save(adminAuthority);
             }
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Username is already taken");
         }
     }
 
     public void changeUserEnabledStatus(String userId, boolean enabled, String loggedInUserId) {
         List<Authority> loggedInAuthorities = authorityRepository.findByUsername(loggedInUserId);
-        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         List<Authority> authorities = authorityRepository.findByUsername(userId);
-        boolean isAdmin = authorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
-        if(isAdminLoggedIn && !isAdmin) {
-            if(userRepository.existsById(userId)) {
+        boolean isAdmin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (isAdminLoggedIn && !isAdmin) {
+            if (userRepository.existsById(userId)) {
                 User user = userRepository.getReferenceById(userId);
                 user.setEnabled(enabled);
                 userRepository.save(user);
             }
-        }
-        else {
+        } else {
             throw new IllegalStateException("You are not admin or other user is admin");
         }
     }

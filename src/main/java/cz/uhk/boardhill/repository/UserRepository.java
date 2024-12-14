@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,String> {
+public interface UserRepository extends JpaRepository<User, String> {
     @Query("SELECT u FROM User u JOIN u.chatUsers cu WHERE cu.chat.name = :name")
     List<User> findAllByChat(String name, Sort sort);
 }

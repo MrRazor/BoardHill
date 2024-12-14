@@ -2,11 +2,11 @@ package cz.uhk.boardhill.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-
-import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor

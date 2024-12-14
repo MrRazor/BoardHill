@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MessageRepository extends JpaRepository<Message,Long> {
+public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("SELECT m FROM Message m WHERE m.chat.name = :chatName AND m.chat.isDeleted = false AND m.isDeleted = false")
     Page<Message> findAllByChatName(String chatName, Pageable pageable);
 }

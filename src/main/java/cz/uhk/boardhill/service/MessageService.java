@@ -12,12 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
@@ -63,28 +63,25 @@ public class MessageService implements ServiceInterface<Message, Long> {
         message.setContent(content);
         message.setDeleted(false);
 
-        if(userRepository.existsById(userId)) {
+        if (userRepository.existsById(userId)) {
             message.setUser(userRepository.getReferenceById(userId));
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("User does not exist");
         }
 
         List<Authority> loggedInAuthorities = authorityRepository.findByUsername(userId);
-        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         Optional<Chat> chatOptional;
-        if(isAdminLoggedIn) {
+        if (isAdminLoggedIn) {
             chatOptional = chatRepository.findById(chatId);
-        }
-        else {
-            chatOptional = chatRepository.findAllByUser(userId, Sort.unsorted()).stream().filter(c->c.getName().equals(chatId)).findFirst();
+        } else {
+            chatOptional = chatRepository.findAllByUser(userId, Sort.unsorted()).stream().filter(c -> c.getName().equals(chatId)).findFirst();
         }
 
-        if(chatOptional.isPresent() && !chatOptional.get().isDeleted()) {
+        if (chatOptional.isPresent() && !chatOptional.get().isDeleted()) {
             message.setChat(chatOptional.get());
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Chat does not exist");
         }
 
@@ -93,16 +90,15 @@ public class MessageService implements ServiceInterface<Message, Long> {
 
     public void deleteMessage(Long messageId, String loggedInUserId) {
         List<Authority> loggedInAuthorities = authorityRepository.findByUsername(loggedInUserId);
-        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new IllegalArgumentException("Message not found"));
 
-        if(!message.getChat().isDeleted() && !message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || message.getChat().getOwner().getUsername().equals((loggedInUserId)) || isAdminLoggedIn)) {
+        if (!message.getChat().isDeleted() && !message.isDeleted() && (message.getUser().getUsername().equals(loggedInUserId) || message.getChat().getOwner().getUsername().equals((loggedInUserId)) || isAdminLoggedIn)) {
             message.setDeleted(true);
             messageRepository.save(message);
-        }
-        else {
+        } else {
             throw new IllegalStateException("Message is already deleted or you do not have permissions to do this");
         }
     }
