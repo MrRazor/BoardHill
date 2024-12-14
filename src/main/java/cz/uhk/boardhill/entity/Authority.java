@@ -10,19 +10,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@IdClass(AuthorityId.class)
 @Entity
 @Table(name = "authorities")
 public class Authority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "authority", nullable = false)
     private String authority;
 
-    @ManyToOne
+    @Id
     @JoinColumn(name = "username", nullable = false)
-    private User user;
+    private String username;
 
 }

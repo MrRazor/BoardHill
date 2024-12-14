@@ -70,7 +70,7 @@ public class MessageService implements ServiceInterface<Message, Long> {
             throw new IllegalArgumentException("User does not exist");
         }
 
-        List<Authority> loggedInAuthorities = authorityRepository.findByUserUsername(userId);
+        List<Authority> loggedInAuthorities = authorityRepository.findByUsername(userId);
         boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
 
         Optional<Chat> chatOptional;
@@ -92,7 +92,7 @@ public class MessageService implements ServiceInterface<Message, Long> {
     }
 
     public void deleteMessage(Long messageId, String loggedInUserId) {
-        List<Authority> loggedInAuthorities = authorityRepository.findByUserUsername(loggedInUserId);
+        List<Authority> loggedInAuthorities = authorityRepository.findByUsername(loggedInUserId);
         boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
 
         Message message = messageRepository.findById(messageId)

@@ -26,7 +26,7 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "username")
     private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "user")

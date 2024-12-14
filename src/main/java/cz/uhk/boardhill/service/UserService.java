@@ -48,18 +48,18 @@ public class UserService implements ServiceInterface<User, String> {
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
             user.setEnabled(true);
-            user = userRepository.save(user);
+            userRepository.save(user);
 
             Authority authority = new Authority();
-            authority.setUser(user);
+            authority.setUsername(username);
             authority.setAuthority("ROLE_USER");
             authorityRepository.save(authority);
 
             if(isAdmin) {
                 Authority adminAuthority = new Authority();
-                adminAuthority.setUser(user);
+                adminAuthority.setUsername(username);
                 adminAuthority.setAuthority("ROLE_ADMIN");
-                authorityRepository.save(authority);
+                authorityRepository.save(adminAuthority);
             }
         }
         else {
@@ -68,9 +68,9 @@ public class UserService implements ServiceInterface<User, String> {
     }
 
     public void changeUserEnabledStatus(String userId, boolean enabled, String loggedInUserId) {
-        List<Authority> loggedInAuthorities = authorityRepository.findByUserUsername(loggedInUserId);
+        List<Authority> loggedInAuthorities = authorityRepository.findByUsername(loggedInUserId);
         boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
-        List<Authority> authorities = authorityRepository.findByUserUsername(userId);
+        List<Authority> authorities = authorityRepository.findByUsername(userId);
         boolean isAdmin = authorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
         if(isAdminLoggedIn && !isAdmin) {
             if(userRepository.existsById(userId)) {

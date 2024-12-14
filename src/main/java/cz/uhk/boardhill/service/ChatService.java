@@ -87,7 +87,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
     }
 
     public void deleteChat(Chat chat, String loggedInUserId) {
-        List<Authority> loggedInAuthorities = authorityRepository.findByUserUsername(loggedInUserId);
+        List<Authority> loggedInAuthorities = authorityRepository.findByUsername(loggedInUserId);
         boolean isAdminLoggedIn = loggedInAuthorities.stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"));
         if(!chat.isDeleted() && (chat.getOwner().getUsername().equals(loggedInUserId) || isAdminLoggedIn)) {
             chat.setDeleted(true);
