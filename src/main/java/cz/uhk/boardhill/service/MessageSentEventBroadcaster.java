@@ -12,9 +12,9 @@ public class MessageSentEventBroadcaster {
     private MessageSentEventBroadcaster() {
     }
 
-    static Executor executor = Executors.newSingleThreadExecutor();
+    static final Executor executor = Executors.newSingleThreadExecutor();
 
-    static LinkedList<Consumer<MessageSentEvent>> listeners = new LinkedList<>();
+    static final LinkedList<Consumer<MessageSentEvent>> listeners = new LinkedList<>();
 
     public static synchronized Registration register(Consumer<MessageSentEvent> listener) {
         listeners.add(listener);

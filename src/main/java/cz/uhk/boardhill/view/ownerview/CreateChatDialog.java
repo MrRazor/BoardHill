@@ -20,7 +20,7 @@ public class CreateChatDialog extends Dialog {
     createChatButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     createChatButton.addClickListener(e->{
-      if(chatName == null || chatName.equals("")) {
+      if(chatName.getValue() == null || chatName.getValue().isEmpty()) {
         Notification notification = Notification.show("You need to fill everything!");
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
       }

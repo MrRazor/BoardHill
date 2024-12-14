@@ -96,7 +96,7 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
 
   @Override
   public void setParameter(BeforeEvent beforeEvent, String s) {
-    List<GrantedAuthority> authorities = authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities().stream().collect(Collectors.toList());
+    List<GrantedAuthority> authorities = new ArrayList<>(authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities());
     username = authContext.getPrincipalName().get();
     isAdmin = authorities.stream().map(a -> a.getAuthority()).anyMatch(a -> a.equals("ROLE_ADMIN"));
 

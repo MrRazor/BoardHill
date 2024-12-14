@@ -5,6 +5,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.RolesAllowed;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +19,7 @@ public class LinkView extends VerticalLayout {
   public LinkView(AuthenticationContext authContext) {
     setAlignItems(Alignment.CENTER);
 
-    List<GrantedAuthority> authorities = authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities().stream().collect(Collectors.toList());
+    List<GrantedAuthority> authorities = new ArrayList<>(authContext.getAuthenticatedUser(UserDetails.class).get().getAuthorities());
 
     Button userChatView = new Button("User Chat View");
     add(userChatView);

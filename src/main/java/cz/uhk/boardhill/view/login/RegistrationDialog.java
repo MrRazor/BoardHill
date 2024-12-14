@@ -22,7 +22,7 @@ public class RegistrationDialog extends Dialog {
     createAccountButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     createAccountButton.addClickListener(e->{
-      if(username.getValue() == null || username.getValue().equals("") || password.getValue() == null || password.getValue().equals("")) {
+      if(username.getValue() == null || username.getValue().isEmpty() || password.getValue() == null || password.getValue().isEmpty()) {
         Notification notification = Notification.show("You need to fill everything!");
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         return;

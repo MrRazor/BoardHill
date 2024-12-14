@@ -23,7 +23,7 @@ public class BoardHillApplication implements CommandLineRunner, AppShellConfigur
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         try {
             userService.register("admin", "password", true);
             LOGGER.info("Default user with admin rights (username: \"admin\", password: \"password\") created.");
