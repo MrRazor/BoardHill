@@ -52,7 +52,7 @@ public class OwnerChatView extends VerticalLayout {
         Grid<Chat> table = new Grid<>(Chat.class, false);
         table.addColumn(Chat::getName).setHeader("Name").setResizable(true);
         table.addColumn(c -> c.getOwner().getUsername()).setHeader("Owner").setResizable(true);
-        table.addColumn(chat -> chat.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(BoardHillApplication.DEFAULT_TZ).localizedBy(BoardHillApplication.DEFAULT_LOCALE))).setHeader("Created at").setResizable(true);
+        table.addColumn(chat -> chat.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(BoardHillApplication.VIEW_TZ).localizedBy(BoardHillApplication.VIEW_LOCALE))).setHeader("Created at").setResizable(true);
         table.addColumn(Chat::isDeleted).setHeader("Deleted").setResizable(true);
         table.setSelectionMode(SelectionMode.SINGLE);
         table.setItems(chatService.findAllNotDeletedChatsByOwner(authContext.getPrincipalName().get()));

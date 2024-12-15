@@ -19,8 +19,8 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class BoardHillApplication implements CommandLineRunner, AppShellConfigurator {
 
-    public static final ZoneId DEFAULT_TZ = ZoneId.of("CET");
-    public static final Locale DEFAULT_LOCALE = Locale.forLanguageTag("cs");
+    public static final ZoneId VIEW_TZ = ZoneId.of("CET");
+    public static final Locale VIEW_LOCALE = Locale.UK;
 
     private static final Logger LOGGER = LogManager.getLogger(BoardHillApplication.class);
     private final UserService userService;

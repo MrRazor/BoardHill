@@ -189,7 +189,7 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
             singleMessage.setWidthFull();
 
             VerticalLayout messageContent = new VerticalLayout(
-                    new Span(message.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(BoardHillApplication.DEFAULT_TZ).localizedBy(BoardHillApplication.DEFAULT_LOCALE))),
+                    new Span(message.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(BoardHillApplication.VIEW_TZ).localizedBy(BoardHillApplication.VIEW_LOCALE))),
                     new Span("User: " + message.getUser().getUsername()),
                     new Span(message.getContent())
             );
