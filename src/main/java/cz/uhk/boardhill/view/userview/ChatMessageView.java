@@ -130,6 +130,8 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
                 if (input.getValue() != null && !input.getValue().isEmpty()) {
                     try {
                         messageService.createMessage(s, username, input.getValue());
+                        Notification notification = Notification.show("Message sent!");
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
                         input.clear();
                     } catch (IllegalArgumentException | IllegalStateException e1) {
@@ -204,6 +206,8 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
             deleteMessageButton.addClickListener(e -> {
                 try {
                     messageService.deleteMessage(message.getId(), username);
+                    Notification notification = Notification.show("Message deleted!");
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                     MessageSentEventBroadcaster.broadcast(new MessageSentEvent(chat.getName()));
                 } catch (IllegalArgumentException | IllegalStateException e1) {
                     Notification notification = Notification.show(e1.getMessage());
