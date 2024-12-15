@@ -82,7 +82,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
         ChatUser chatUser = new ChatUser();
         chatUser.setChat(chat);
         chatUser.setUser(userRepository.getReferenceById(userId));
-        chatUser.setJoinedAt(ZonedDateTime.now());
+        chatUser.setJoinedAt(ZonedDateTime.now(ZoneId.of("UTC")));
         chatUserRepository.save(chatUser);
 
         return createdChat;
@@ -120,7 +120,7 @@ public class ChatService implements ServiceInterface<Chat, String> {
         ChatUser chatUser = new ChatUser();
         chatUser.setChat(chat);
         chatUser.setUser(userRepository.getReferenceById(userToAddId));
-        chatUser.setJoinedAt(ZonedDateTime.now());
+        chatUser.setJoinedAt(ZonedDateTime.now(ZoneId.of("UTC")));
 
         chatUserRepository.save(chatUser);
     }

@@ -10,10 +10,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.ZoneId;
+import java.util.Locale;
+import java.util.TimeZone;
+
 @Push
 @AllArgsConstructor
 @SpringBootApplication
 public class BoardHillApplication implements CommandLineRunner, AppShellConfigurator {
+
+    public static final ZoneId DEFAULT_TZ = ZoneId.of("CET");
+    public static final Locale DEFAULT_LOCALE = Locale.forLanguageTag("cs");
 
     private static final Logger LOGGER = LogManager.getLogger(BoardHillApplication.class);
     private final UserService userService;
@@ -24,6 +31,9 @@ public class BoardHillApplication implements CommandLineRunner, AppShellConfigur
 
     @Override
     public void run(String... args) {
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC")));
+        Locale.setDefault(Locale.UK);
+
         try {
             userService.register("admin", "password", true);
             LOGGER.info("Default user with admin rights (username: \"admin\", password: \"password\") created.");

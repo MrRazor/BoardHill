@@ -13,6 +13,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import cz.uhk.boardhill.BoardHillApplication;
 import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.service.ChatService;
 import cz.uhk.boardhill.service.UserService;
@@ -20,6 +21,7 @@ import cz.uhk.boardhill.view.MainLayout;
 import jakarta.annotation.security.RolesAllowed;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +53,7 @@ public class AdminChatView extends VerticalLayout {
         Grid<Chat> table = new Grid<>(Chat.class, false);
         table.addColumn(Chat::getName).setHeader("Name").setResizable(true);
         table.addColumn(c -> c.getOwner().getUsername()).setHeader("Owner").setResizable(true);
-        table.addColumn(chat -> chat.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))).setHeader("Created at").setResizable(true);
+        table.addColumn(chat -> chat.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(BoardHillApplication.DEFAULT_TZ).localizedBy(BoardHillApplication.DEFAULT_LOCALE))).setHeader("Created at").setResizable(true);
         table.addColumn(Chat::isDeleted).setHeader("Deleted").setResizable(true);
         table.setSelectionMode(SelectionMode.SINGLE);
         table.setItems(chatService.findAllNotDeletedChats());

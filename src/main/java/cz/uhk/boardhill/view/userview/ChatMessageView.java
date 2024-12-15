@@ -19,6 +19,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import cz.uhk.boardhill.BoardHillApplication;
 import cz.uhk.boardhill.entity.Chat;
 import cz.uhk.boardhill.entity.Message;
 import cz.uhk.boardhill.service.ChatService;
@@ -188,7 +189,7 @@ public class ChatMessageView extends VerticalLayout implements HasUrlParameter<S
             singleMessage.setWidthFull();
 
             VerticalLayout messageContent = new VerticalLayout(
-                    new Span("At: " + message.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))),
+                    new Span(message.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(BoardHillApplication.DEFAULT_TZ).localizedBy(BoardHillApplication.DEFAULT_LOCALE))),
                     new Span("User: " + message.getUser().getUsername()),
                     new Span(message.getContent())
             );
