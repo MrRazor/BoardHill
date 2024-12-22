@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @Push
 @SpringBootApplication
@@ -17,6 +18,9 @@ public class BoardHillApplication extends SpringBootServletInitializer implement
     public static final Locale VIEW_LOCALE = Locale.UK;
 
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC")));
+        Locale.setDefault(Locale.UK);
+
         SpringApplication.run(BoardHillApplication.class, args);
     }
 

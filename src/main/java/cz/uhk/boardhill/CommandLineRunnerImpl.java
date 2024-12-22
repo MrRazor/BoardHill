@@ -7,10 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneId;
-import java.util.Locale;
-import java.util.TimeZone;
-
 @AllArgsConstructor
 @Component
 public class CommandLineRunnerImpl implements CommandLineRunner {
@@ -20,9 +16,6 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC")));
-        Locale.setDefault(Locale.UK);
-
         try {
             userService.register("admin", "password", true);
             LOGGER.info("Default user with admin rights (username: \"admin\", password: \"password\") created.");
