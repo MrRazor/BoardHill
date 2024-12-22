@@ -42,12 +42,12 @@ import java.util.stream.Collectors;
 public class ChatMessageView extends VerticalLayout implements HasUrlParameter<String> {
 
     private static final int PAGE_SIZE = 7;
-    private final ChatService chatService;
-    private final MessageService messageService;
-    private final AuthenticationContext authContext;
-    private List<Message> messages;
+    private final transient ChatService chatService;
+    private final transient MessageService messageService;
+    private final transient AuthenticationContext authContext;
+    private transient List<Message> messages;
     private int page = 0;
-    private Chat chat;
+    private transient Chat chat;
     private String username;
     private boolean isAdmin = false;
     private VerticalLayout messageLayout;
